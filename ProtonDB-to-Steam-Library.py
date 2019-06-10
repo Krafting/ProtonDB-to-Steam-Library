@@ -151,9 +151,16 @@ def main(argv):
             tag_num = ""
 
             # If the app is native, no need to check ProtonDB
+            # if is_native(str(app_id)):
+            #     continue
+
             if is_native(str(app_id)):
+                protondb_rating = "native"
                 print(str(app_id) + " native")
-                continue
+                # continue
+            else:
+                protondb_rating = get_protondb_rating(app_id)
+                print(str(app_id) + " " + protondb_rating)
 
             try:
                 # Have to create a copy to avoid: "RuntimeError: dictionary changed size during iteration"
@@ -174,11 +181,9 @@ def main(argv):
                 tag_num = "0"
                 sharedconfig[configstore]["Software"]["Valve"]["Steam"]["Apps"][str(app_id)]["tags"] = vdf.VDFDict()
 
-            protondb_rating = get_protondb_rating(app_id)
-            print(str(app_id) + " " + protondb_rating)
-
             # The 1,2,etc. force the better ranks to be at the top, as Steam sorts these alphabetically
             possible_ranks = {
+                "native": "ProtonDB Ranking: 0 Native",
                 "platinum": "ProtonDB Ranking: 1 Platinum",
                 "gold": "ProtonDB Ranking: 2 Gold",
                 "silver": "ProtonDB Ranking: 3 Silver",
